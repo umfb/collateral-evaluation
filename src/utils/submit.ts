@@ -280,7 +280,7 @@ export async function submit(
         name: "Unilag Microfinance Bank",
         email: "info@unilagmfbank.com",
       },
-      to: [{ email: "aadebajo@unilagmfbank.com", name: "UMFB" }],
+      to: [{ email: "it-unit@unilagmfbank.com", name: "UMFB" }],
       subject: "Guarantor Assessment Form Submission",
       htmlContent: "<b>Please find the attached loan form and images.</b>",
       attachment: [
