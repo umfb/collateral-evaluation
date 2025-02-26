@@ -5,63 +5,54 @@ import { ImageDataType } from "../models/ImageData.type";
 import { sanitizer } from "./santizeFIleName";
 import axios from "axios";
 import { formatDate } from "./formatDate";
-import { Dispatch, SetStateAction } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const schemaOrder = [
-  "Applicant Name",
-  "Date of business visit",
-  "Date of home visit",
-  "Type of Guarantor",
-  "Last Name",
-  "Middle Name",
-  "First Name",
-  "Date of Birth",
-  "Sex",
-  "Relation with Client",
-  "Type of ID",
-  "ID Card Number",
-  "Marital Status",
-  "Spouse Name",
-  "Spouse Phone Number",
-  "House Address",
-  "Residence Type",
-  "First Phone Number",
-  "Second Phone Number",
-  "Business Name",
-  "Business Address",
-  "Business Address Age",
-  "Business Activity",
-  "Business Activity Age",
-  "Business Premises",
-  "Number of Employee",
-  "Business Co-owned",
-  "Number of Sales Point",
-  "Sales",
-  "Cost of Sales",
-  "Operational Expenses",
-  "Other Income",
-  "Family Expense",
-  "Repayment Capacity",
-  "Cash and Bank",
-  "Inventory",
-  "Fixed Asset",
-  "Total Asset",
-  "Liability",
-  "Equity",
-  "Name of Company",
-  "Company Address",
-  "Designation",
-  "Department/Unit",
-  "Work Phone Number",
-  "Company Email",
-  "Years of Service",
-  "Probation",
-  "Name of Supervisor",
-  "Supervisor Phone Number",
-  "Net Pay",
+const fieldOrder = [
+  "Collateral Owner",
+  "Collateral",
+  "Inventory Market Value",
+  "Inventory Liquidation Value",
+  "Vehicle Mortgage",
+  "Land & Building Mortgage",
+  "HG",
+  "BA",
+  "INV",
+  "VMG",
+  "LBMG",
+  "Others",
+  "Collateral Owner Name",
+  "Collateral Owner Signature Date",
+  "Witness Name",
+  "Witness Signature Date",
 ];
+
+const nestedFieldOrder: Record<string, string[]> = {
+  Collateral: [
+    "Collateral Type",
+    "Collateral Desc of item",
+    "Collateral Year of Purchase",
+    "Collateral Purchase Value",
+    "Collateral Market Value",
+    "Collateral Liquidation Value",
+  ],
+  "Vehicle Mortgage": [
+    "Vehicle Mortgage Year",
+    "Vehicle Mortgage Color",
+    "Vehicle Mortgage Type",
+    "Vehicle Mortgage Reg No",
+    "Vehicle Mortgage Engine No",
+    "Vehicle Mortgage Chasis No",
+    "Vehicle Mortgage Purchase Value",
+    "Vehicle Mortgage Market Value",
+    "Vehicle Mortgage Liquidation Value",
+  ],
+  "Land & Building Mortgage": [
+    "Land & Building Market Value",
+    "Land & Building Force Sale Value",
+    "Land & Building Description",
+  ],
+};
 
 function showErrorNotification(message: string) {
   toast.error(message, {
@@ -90,21 +81,34 @@ function showSuccessNotification(message: string) {
 }
 
 export async function submit(
-  data: Record<string, string>,
-  images: Array<ImageDataType>,
+  data: Record<string, any>,
+  images: { owner: ImageDataType[]; witness: ImageDataType[] },
   reset: () => void,
-  setIsLoading: Dispatch<SetStateAction<boolean>>,
-  setSignaturePic: Dispatch<SetStateAction<boolean>>
+  setIsLoading: (value: boolean) => void,
+  setSignature: (value: { owner: boolean; witness: boolean }) => void,
+  setSignaturePic: (value: { owner: ""; witness: "" }) => void
 ) {
   console.log("clicked");
 
   try {
-    const orderedData: Record<string, string>[] = schemaOrder.map((key) => ({
-      key,
-      value: data[key],
-    }));
+    const orderedData: Record<string, any> = {};
 
-    console.log(orderedData);
+    fieldOrder.forEach((key) => {
+      if (Array.isArray(data[key]) && nestedFieldOrder[key]) {
+        orderedData[key] = data[key].map((item) => {
+          return nestedFieldOrder[key].reduce(
+            (acc: Record<string, any>, subKey: any) => {
+              acc[subKey] = item[subKey] || "";
+              return acc;
+            },
+            {}
+          );
+        });
+      } else {
+        orderedData[key] = data[key] || "";
+      }
+    });
+
     const doc = new jsPDF();
 
     const marginX = 10;
@@ -137,15 +141,72 @@ export async function submit(
     }
 
     if (orderedData.length < 1) return;
-    orderedData
-      .filter((item) => item.value !== "")
-      .forEach((item) => {
-        const keyText = `${item.key}:  `;
-        const valueText = item.value;
+    console.log("ordered:", orderedData);
+    Object.keys(orderedData).forEach((key) => {
+      const value = orderedData[key];
+
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          if (typeof item === "object") {
+            Object.keys(item).forEach((subKey) => {
+              const subValue = item[subKey];
+              const keyText = `${subKey}:  `;
+              let valueText = subValue;
+
+              if (keyText.toLowerCase().includes("date")) {
+                valueText = formatDate(subValue);
+              } else if (
+                keyText.toLowerCase().includes("value") ||
+                keyText.toLowerCase().includes("purchase")
+              ) {
+                valueText = formatCurrency(subValue);
+              }
+
+              const keyWidth = doc.getTextWidth(keyText);
+              const remainingWidth = maxWidth - keyWidth;
+              const splittedValue = doc.splitTextToSize(
+                valueText,
+                remainingWidth
+              );
+              const totalItemHeight = splittedValue.length * lineHeight;
+
+              if (cursorY + totalItemHeight > pageHeight - marginX) {
+                doc.addPage();
+                cursorY = 20;
+              }
+
+              if (splittedValue.length > 0) {
+                doc.setFontSize(16);
+                doc.setFont("Helvetica", "normal");
+                doc.text(keyText + splittedValue[0], marginX, cursorY);
+                for (let i = 1; i < splittedValue.length; i++) {
+                  doc.text(
+                    splittedValue[i],
+                    marginX + keyWidth,
+                    cursorY + i * lineHeight
+                  );
+                }
+              }
+
+              cursorY += splittedValue.length * lineHeight + lineHeight;
+            });
+          }
+        });
+      } else {
+        const keyText = `${key}:  `;
+        let valueText = value || "";
+
+        if (keyText.toLowerCase().includes("date")) {
+          valueText = formatDate(valueText);
+        } else if (
+          keyText.toLowerCase().includes("value") ||
+          keyText.toLowerCase().includes("purchase")
+        ) {
+          valueText = formatCurrency(valueText);
+        }
+
         const keyWidth = doc.getTextWidth(keyText);
-
         const remainingWidth = maxWidth - keyWidth;
-
         const splittedValue = doc.splitTextToSize(valueText, remainingWidth);
         const totalItemHeight = splittedValue.length * lineHeight;
 
@@ -157,27 +218,7 @@ export async function submit(
         if (splittedValue.length > 0) {
           doc.setFontSize(16);
           doc.setFont("Helvetica", "normal");
-          if (
-            keyText.toLowerCase().includes("pay") ||
-            keyText.toLowerCase().includes("cost") ||
-            keyText.toLowerCase().includes("asset") ||
-            keyText.toLowerCase().includes("liability") ||
-            keyText.toLowerCase().includes("equity") ||
-            keyText.toLowerCase().includes("income") ||
-            keyText.toLowerCase().includes("cash") ||
-            keyText.toLowerCase().includes("inventory") ||
-            keyText.toLowerCase().includes("expense")
-          ) {
-            doc.text(
-              keyText + formatCurrency(splittedValue[0]),
-              marginX,
-              cursorY
-            );
-          } else if (keyText.toLowerCase().includes("date")) {
-            doc.text(keyText + formatDate(splittedValue[0]), marginX, cursorY);
-          } else {
-            doc.text(keyText + splittedValue[0], marginX, cursorY);
-          }
+          doc.text(keyText + splittedValue[0], marginX, cursorY);
           for (let i = 1; i < splittedValue.length; i++) {
             doc.text(
               splittedValue[i],
@@ -188,7 +229,8 @@ export async function submit(
         }
 
         cursorY += splittedValue.length * lineHeight + lineHeight;
-      });
+      }
+    });
     const pdfBuffer = doc.output("arraybuffer");
     const base64Pdf = await new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -198,9 +240,9 @@ export async function submit(
       reader.readAsDataURL(new Blob([pdfBuffer]));
     });
 
-    const imageAttachment = images
-      .map((img) => {
-        if (!img.mimeType || !img.base64) return;
+    const imageAttachment = [
+      ...images.owner.map((img) => {
+        if (!img.mimeType || !img.base64) return null;
 
         if (!img.base64.startsWith("data:")) {
           img.base64 = `data:${img.mimeType};base64,${img.base64}`;
@@ -208,13 +250,28 @@ export async function submit(
 
         return {
           content: img.base64.split(",")[1],
-          name:
-            sanitizer(img.name) &&
-            `${sanitizer(img.name)}.${img.mimeType.split("/")[1]}`,
+          name: sanitizer(img.name)
+            ? `${sanitizer(img.name)}.${img.mimeType.split("/")[1]}`
+            : undefined,
           contentType: img.mimeType,
         };
-      })
-      .filter(Boolean);
+      }),
+      ...images.witness.map((img) => {
+        if (!img.mimeType || !img.base64) return null;
+
+        if (!img.base64.startsWith("data:")) {
+          img.base64 = `data:${img.mimeType};base64,${img.base64}`;
+        }
+
+        return {
+          content: img.base64.split(",")[1],
+          name: sanitizer(img.name)
+            ? `${sanitizer(img.name)}.${img.mimeType.split("/")[1]}`
+            : undefined,
+          contentType: img.mimeType,
+        };
+      }),
+    ].filter(Boolean);
 
     if (imageAttachment.length < 1) return;
 
@@ -223,7 +280,7 @@ export async function submit(
         name: "Unilag Microfinance Bank",
         email: "info@unilagmfbank.com",
       },
-      to: [{ email: "accountopening@unilagmfbank.com", name: "UMFB" }],
+      to: [{ email: "aadebajo@unilagmfbank.com", name: "UMFB" }],
       subject: "Guarantor Assessment Form Submission",
       htmlContent: "<b>Please find the attached loan form and images.</b>",
       attachment: [
@@ -252,7 +309,8 @@ export async function submit(
 
       if (response.status === 200 || response.status === 201) {
         showSuccessNotification("Loan request submitted!");
-        setSignaturePic(false);
+        setSignature({ owner: false, witness: false });
+        setSignaturePic({ owner: "", witness: "" });
         reset();
       } else {
         showErrorNotification("Failed to send email.");

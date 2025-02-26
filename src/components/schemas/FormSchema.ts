@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export const FormSchema = z.object({
-  // "Collateral Owner": z.string().trim().nonempty("This field is required"),
+  "Collateral Owner": z.string().trim().nonempty("This field is required"),
   Collateral: z.array(
     z.object({
       "Collateral Type": z.string().trim().nonempty("This field is required"),
@@ -95,7 +95,6 @@ export const FormSchema = z.object({
   BA: z.string().trim().nonempty("This field is required"),
   INV: z.string().trim().nonempty("This field is required"),
   VMG: z.string().trim().nonempty("This field is required"),
-  Sales: z.string().trim().nonempty("This field is required"),
   LBMG: z.string().trim().nonempty("This field is required"),
   Others: z.string().trim().nonempty("This field is required"),
   "Collateral Owner Name": z.string().trim().nonempty("This field is required"),
