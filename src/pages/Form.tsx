@@ -192,14 +192,14 @@ export default function Form() {
           className="flex flex-col gap-3 mx-auto md:px-3 mt-3 inter"
         >
           <div className="wrapper-custom">
-            <label htmlFor="" className="font-bold">
+            <label htmlFor="collateral-owner" className="font-bold">
               Collateral Owner
             </label>
             <select
               className="input-custom"
               {...register("Collateral Owner")}
               name="Collateral Owner"
-              id=""
+              id="collateral-owner"
             >
               <option className="bg-gray-300" selected value="">
                 Collateral Owner?
@@ -218,7 +218,7 @@ export default function Form() {
               <MiniHeader title={`Collateral ${index + 1}`} />
               <div className="row mt-3">
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label className="font-bold" htmlFor="">
+                  <label className="font-bold" htmlFor={`${index}collateral-type`}>
                     Type
                   </label>
                   <input
@@ -226,6 +226,7 @@ export default function Form() {
                     className="input-custom"
                     placeholder="Type"
                     type="text"
+                    id={`${index}collateral-type`}
                   />
                   {errors.Collateral &&
                     errors.Collateral[index] &&
@@ -236,7 +237,7 @@ export default function Form() {
                     )}
                 </div>
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold w-full truncate">
+                  <label htmlFor={`${index}desc`} className="font-bold w-full truncate">
                     Description of Item (Color, Make, Model, S/No)
                   </label>
                   <input
@@ -244,6 +245,7 @@ export default function Form() {
                     type="text"
                     placeholder="Description"
                     className="input-custom"
+                    id={`${index}desc`}
                   />
                   {errors.Collateral &&
                     errors.Collateral[index] &&
@@ -257,7 +259,7 @@ export default function Form() {
                     )}
                 </div>
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}year-of-purchase`} className="font-bold">
                     Year of Purchase
                   </label>
                   <input
@@ -267,6 +269,7 @@ export default function Form() {
                     type="text"
                     placeholder="Year of Purchase"
                     className="input-custom"
+                    id={`${index}year-of-purchase`}
                   />
                   {errors.Collateral &&
                     errors.Collateral[index] &&
@@ -283,7 +286,7 @@ export default function Form() {
               </div>
               <div className="row mt-2">
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label className="font-bold" htmlFor="">
+                  <label className="font-bold" htmlFor={`${index}purchase-value`}>
                     Purchase Value
                   </label>
                   <input
@@ -293,6 +296,7 @@ export default function Form() {
                     className="input-custom"
                     placeholder="Purchase Value"
                     type="text"
+                    id={`${index}purchase-value`}
                   />
                   {errors.Collateral &&
                     errors.Collateral[index] &&
@@ -306,7 +310,7 @@ export default function Form() {
                     )}
                 </div>
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold w-full truncate">
+                  <label htmlFor={`${index}col-market-value`} className="font-bold w-full truncate">
                     Market Value
                   </label>
                   <input
@@ -314,6 +318,7 @@ export default function Form() {
                     type="text"
                     placeholder="Market Value"
                     className="input-custom"
+                    id={`${index}col-market-value`}
                   />
                   {errors.Collateral &&
                     errors.Collateral[index] &&
@@ -327,7 +332,7 @@ export default function Form() {
                     )}
                 </div>
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}col-liquidation-value`} className="font-bold">
                     Liquidation Value
                   </label>
                   <input
@@ -337,6 +342,7 @@ export default function Form() {
                     type="text"
                     placeholder="Liquidation Value"
                     className="input-custom"
+                    id={`${index}col-liquidation-value`}
                   />
                   {errors.Collateral &&
                     errors.Collateral[index] &&
@@ -386,7 +392,7 @@ export default function Form() {
           </div>
           <div className="row mb-3">
             <div className="wrapper-custom col-12 col-lg-6">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="inv-market-value" className="font-bold">
                 Market Value
               </label>
               <input
@@ -394,6 +400,7 @@ export default function Form() {
                 type="text"
                 placeholder="Market Value"
                 className="input-custom"
+                id="inv-market-value"
               />
               {errors["Inventory Market Value"] && (
                 <p className="absolute -bottom-9 text-sm text-red-500">
@@ -402,7 +409,7 @@ export default function Form() {
               )}
             </div>
             <div className="wrapper-custom col-12 col-lg-6">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="inv-liquidation-value" className="font-bold">
                 Liquidation Value
               </label>
               <input
@@ -410,6 +417,7 @@ export default function Form() {
                 type="text"
                 placeholder="Liquidation Value"
                 className="input-custom"
+                id="inv-liquidation-value"
               />
               {errors["Inventory Liquidation Value"] && (
                 <p className="absolute -bottom-9 text-sm text-red-500">
@@ -423,7 +431,7 @@ export default function Form() {
               <MiniHeader title={`Vehicle Mortgage ${index + 1}`} />
               <div className="row mt-3">
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}vmg-mortgage-year`} className="font-bold">
                     Year
                   </label>
                   <input
@@ -433,6 +441,7 @@ export default function Form() {
                     type="text"
                     placeholder="Year"
                     className="input-custom"
+                    id={`${index}vmg-mortgage-year`}
                   />
                   {errors["Vehicle Mortgage"] &&
                     errors["Vehicle Mortgage"][index] &&
@@ -449,7 +458,7 @@ export default function Form() {
                     )}
                 </div>
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}vmg-mortgage-color`} className="font-bold">
                     Color
                   </label>
                   <input
@@ -459,6 +468,7 @@ export default function Form() {
                     type="text"
                     placeholder="Color"
                     className="input-custom"
+                    id={`${index}vmg-mortgage-color`}
                   />
                   {errors["Vehicle Mortgage"] &&
                     errors["Vehicle Mortgage"][index] &&
@@ -475,7 +485,7 @@ export default function Form() {
                     )}
                 </div>
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}vmg-mortgage-type`} className="font-bold">
                     Type
                   </label>
                   <input
@@ -485,6 +495,7 @@ export default function Form() {
                     type="text"
                     placeholder="Type"
                     className="input-custom"
+                    id={`${index}vmg-mortgage-type`}
                   />
                   {errors["Vehicle Mortgage"] &&
                     errors["Vehicle Mortgage"][index] &&
@@ -503,7 +514,7 @@ export default function Form() {
               </div>
               <div className="row">
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}vmg-mortgage-reg`} className="font-bold">
                     Registration Number
                   </label>
                   <input
@@ -513,6 +524,7 @@ export default function Form() {
                     type="text"
                     placeholder="Registration Number"
                     className="input-custom"
+                    id={`${index}vmg-mortgage-reg`}
                   />
                   {errors["Vehicle Mortgage"] &&
                     errors["Vehicle Mortgage"][index] &&
@@ -529,7 +541,7 @@ export default function Form() {
                     )}
                 </div>
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}vmg-mortgage-engine`} className="font-bold">
                     Engine Number
                   </label>
                   <input
@@ -539,6 +551,7 @@ export default function Form() {
                     type="text"
                     placeholder="Engine Number"
                     className="input-custom"
+                    id={`${index}vmg-mortgage-engine`}
                   />
                   {errors["Vehicle Mortgage"] &&
                     errors["Vehicle Mortgage"][index] &&
@@ -555,7 +568,7 @@ export default function Form() {
                     )}
                 </div>
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}vmg-chasis`} className="font-bold">
                     Chasis Number
                   </label>
                   <input
@@ -565,6 +578,7 @@ export default function Form() {
                     type="text"
                     placeholder="Chasis Number"
                     className="input-custom"
+                    id={`${index}vmg-chasis`}
                   />
                   {errors["Vehicle Mortgage"] &&
                     errors["Vehicle Mortgage"][index] &&
@@ -583,7 +597,7 @@ export default function Form() {
               </div>
               <div className="row">
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}vmg-mortgage-purchase-value`} className="font-bold">
                     Purchase Value
                   </label>
                   <input
@@ -593,6 +607,7 @@ export default function Form() {
                     type="text"
                     placeholder="Purchase Value"
                     className="input-custom"
+                    id={`${index}vmg-mortgage-purchase-value`}
                   />
                   {errors["Vehicle Mortgage"] &&
                     errors["Vehicle Mortgage"][index] &&
@@ -609,7 +624,7 @@ export default function Form() {
                     )}
                 </div>
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}vmg-mortgage-market-value`} className="font-bold">
                     Market Value
                   </label>
                   <input
@@ -619,6 +634,7 @@ export default function Form() {
                     type="text"
                     placeholder="Market Value"
                     className="input-custom"
+                    id={`${index}vmg-mortgage-market-value`}
                   />
                   {errors["Vehicle Mortgage"] &&
                     errors["Vehicle Mortgage"][index] &&
@@ -635,7 +651,7 @@ export default function Form() {
                     )}
                 </div>
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}vmg-mortgage-liquidation-value`} className="font-bold">
                     Liquidation Value
                   </label>
                   <input
@@ -645,6 +661,7 @@ export default function Form() {
                     type="text"
                     placeholder="Liquidation Value"
                     className="input-custom"
+                    id={`${index}vmg-mortgage-liquidation-value`}
                   />
                   {errors["Vehicle Mortgage"] &&
                     errors["Vehicle Mortgage"][index] &&
@@ -697,7 +714,7 @@ export default function Form() {
               <MiniHeader title={`Land & Building Mortgage ${index + 1}`} />
               <div className="row mt-3">
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={ `${index}lmbg-desc`} className="font-bold">
                     Description
                   </label>
                   <input
@@ -707,6 +724,7 @@ export default function Form() {
                     type="text"
                     placeholder="Description"
                     className="input-custom"
+                    id={`${index}lmbg-desc`}
                   />
                   {errors["Land & Building Mortgage"] &&
                     errors["Land & Building Mortgage"][index] &&
@@ -723,7 +741,7 @@ export default function Form() {
                     )}
                 </div>
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}lmbg-force-sale-value`} className="font-bold">
                     Force Sale Value
                   </label>
                   <input
@@ -733,6 +751,7 @@ export default function Form() {
                     type="text"
                     placeholder="Force Sale Value"
                     className="input-custom"
+                    id={`${index}lmbg-force-sale-value`}
                   />
                   {errors["Land & Building Mortgage"] &&
                     errors["Land & Building Mortgage"][index] &&
@@ -749,7 +768,7 @@ export default function Form() {
                     )}
                 </div>
                 <div className="wrapper-custom col-12 col-lg-4 relative">
-                  <label htmlFor="" className="font-bold">
+                  <label htmlFor={`${index}lbmg-market-value`} className="font-bold">
                     Market Value
                   </label>
                   <input
@@ -759,6 +778,7 @@ export default function Form() {
                     type="text"
                     placeholder="Market Value"
                     className="input-custom"
+                    id={`${index}lbmg-market-value`}
                   />
                   {errors["Land & Building Mortgage"] &&
                     errors["Land & Building Mortgage"][index] &&
@@ -803,7 +823,7 @@ export default function Form() {
           <MiniHeader title="COLLATERAL CLASSIFICATION SUMMARY" />
           <div className="row">
             <div className="wrapper-custom col-12 col-lg-4">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="hg" className="font-bold">
                 Household Goods
               </label>
               <input
@@ -811,6 +831,7 @@ export default function Form() {
                 type="text"
                 placeholder="Household Goods"
                 className="input-custom"
+                id="hg"
               />
               {errors["HG"] && (
                 <p className="absolute -bottom-9 text-sm text-red-500">
@@ -819,7 +840,7 @@ export default function Form() {
               )}
             </div>
             <div className="wrapper-custom col-12 col-lg-4">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="ba" className="font-bold">
                 Business Asset
               </label>
               <input
@@ -827,6 +848,7 @@ export default function Form() {
                 type="text"
                 placeholder="Business Asset"
                 className="input-custom"
+                id="ba"
               />
               {errors["BA"] && (
                 <p className="absolute -bottom-9 text-sm text-red-500">
@@ -835,7 +857,7 @@ export default function Form() {
               )}
             </div>
             <div className="wrapper-custom col-12 col-lg-4">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="inv" className="font-bold">
                 Inventory
               </label>
               <input
@@ -843,6 +865,7 @@ export default function Form() {
                 type="text"
                 placeholder="Inventory"
                 className="input-custom"
+                id="inv"
               />
               {errors["INV"] && (
                 <p className="absolute -bottom-9 text-sm text-red-500">
@@ -853,7 +876,7 @@ export default function Form() {
           </div>
           <div className="row">
             <div className="wrapper-custom col-12 col-lg-4">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="vmg" className="font-bold">
                 Vehicle Mortgage
               </label>
               <input
@@ -861,6 +884,7 @@ export default function Form() {
                 type="text"
                 placeholder="Vehicle Mortgage"
                 className="input-custom"
+                id="vmg"
               />
               {errors["VMG"] && (
                 <p className="absolute -bottom-9 text-sm text-red-500">
@@ -869,7 +893,7 @@ export default function Form() {
               )}
             </div>
             <div className="wrapper-custom col-12 col-lg-4">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="lbmg" className="font-bold">
                 Land & Building Mortgage
               </label>
               <input
@@ -877,6 +901,7 @@ export default function Form() {
                 type="text"
                 placeholder="Land & Building Mortgage"
                 className="input-custom"
+                id="lbmg"
               />
               {errors["LBMG"] && (
                 <p className="absolute -bottom-9 text-sm text-red-500">
@@ -885,7 +910,7 @@ export default function Form() {
               )}
             </div>
             <div className="wrapper-custom col-12 col-lg-4">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="others" className="font-bold">
                 Others
               </label>
               <input
@@ -893,6 +918,7 @@ export default function Form() {
                 type="text"
                 placeholder="Others"
                 className="input-custom"
+                id="others"
               />
               {errors["Others"] && (
                 <p className="absolute -bottom-9 text-sm text-red-500">
@@ -948,7 +974,7 @@ export default function Form() {
           </div>
           <div className="row">
             <div className="wrapper-custom col-12 col-lg-6">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="owner-name" className="font-bold">
                 Name
               </label>
               <input
@@ -956,6 +982,7 @@ export default function Form() {
                 type="text"
                 placeholder="Name"
                 className="input-custom"
+                id="owner-name"
               />
               {errors["Collateral Owner Name"] && (
                 <p className="absolute -bottom-9 text-sm text-red-500">
@@ -964,13 +991,14 @@ export default function Form() {
               )}
             </div>
             <div className="wrapper-custom col-12 col-lg-6">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="owner-sig-date" className="font-bold">
                 Date
               </label>
               <input
                 {...register("Collateral Owner Signature Date")}
                 type="date"
                 className="input-custom"
+                id="owner-sig-date"
               />
               {errors["Collateral Owner Signature Date"] && (
                 <p className="absolute -bottom-9 text-sm text-red-500">
@@ -1025,7 +1053,7 @@ export default function Form() {
           </div>
           <div className="row">
             <div className="wrapper-custom col-12 col-lg-6">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="witness-name" className="font-bold">
                 Name
               </label>
               <input
@@ -1033,6 +1061,7 @@ export default function Form() {
                 type="text"
                 placeholder="Name"
                 className="input-custom"
+                id="witness-name"
               />
               {errors["Witness Name"] && (
                 <p className="absolute -bottom-9 text-sm text-red-500">
@@ -1041,13 +1070,14 @@ export default function Form() {
               )}
             </div>
             <div className="wrapper-custom col-12 col-lg-6">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="witness-sig-date" className="font-bold">
                 Date
               </label>
               <input
                 {...register("Witness Signature Date")}
                 type="date"
                 className="input-custom"
+                id="witness-sig-date"
               />
               {errors["Witness Signature Date"] && (
                 <p className="absolute -bottom-9 text-sm text-red-500">
@@ -1058,6 +1088,7 @@ export default function Form() {
           </div>
           <div className="rounded-full w-full bg-[#800] mt-3">
             <button
+              aria-label="Submit button"
               disabled={isLoading}
               type="submit"
               className="bg-[#800] text-white py-[13px] rounded-pill w-full disabled:bg-[#db8686] hover:bg-[#700] text-center flex items-center justify-center"
